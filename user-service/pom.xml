@@ -51,6 +51,17 @@
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
+		<!--Spring Boot mikro hizmetlerinde bir API istemcisini
+		(HTTP istekleri gönderen bir istemci) temsil eden ve Feign
+		 olarak adlandırılan bir bileşen vardır
+		. Feign, mikro hizmet mimarilerinde servis çağrılarını
+		kolaylaştırmak ve yönetmek için kullanılan bir deklaratif
+		HTTP istemci aracıdır. Feign, Netflix tarafından geliştirilmiş
+		 ve Spring Cloud tarafından desteklenen bir bileşendir.-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

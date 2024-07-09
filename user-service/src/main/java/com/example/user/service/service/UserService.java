@@ -1,6 +1,7 @@
 package com.example.user.service.service;
 
 import com.example.user.service.exception.ResourceNotFoundException;
+import com.example.user.service.external.HotelService;
 import com.example.user.service.model.Hotel;
 import com.example.user.service.model.Rating;
 import com.example.user.service.model.User;
@@ -28,6 +29,8 @@ public class UserService {
 
     //Bu kütüphane, mikro hizmetlerin birbirleriyle iletişim kurmasını sağlar ve JSON, XML veya diğer medya tipleri üzerinde işlem yapabilir.
     private final RestTemplate restTemplate;
+
+    private final HotelService hotelService;
 
     //create
 
@@ -125,15 +128,17 @@ public class UserService {
         ratingsOfUser.stream().map(rating -> {
 
             // TEK BİR OBJEYE İHTİYACIM OLDUĞU İÇİN ENTİTY METHODUNU kullanadabilirim
-            String ratingsHotelIdUrl = "http://HOTEL-SERVICE/hotels/" + rating.getHotelId();
+          /*  String ratingsHotelIdUrl = "http://HOTEL-SERVICE/hotels/" + rating.getHotelId();
             ResponseEntity<Hotel> forEntity = restTemplate.exchange(
                     ratingsHotelIdUrl,
                     HttpMethod.GET,
                     null,
                     Hotel.class
             );
-            Hotel hotel = forEntity.getBody();// hotel bilgilerni dönder.
-            log.info("response status code : {}", forEntity.getStatusCode());
+            Hotel hotel = forEntity.getBody();// hotel bilgilerni dönder.*/
+
+            Hotel hotel = hotelService.getHotel(rating.getHotelId());// hotel bilgilerni dönder.
+           // log.info("response status code : {}", forEntity.getStatusCode());
 
             rating.setHotel(hotel);
 
