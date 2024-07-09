@@ -1,0 +1,11 @@
+server:
+  port: 8761  #default eureka port number
+# eureka server config
+
+eureka:
+  instance:
+    hostname: localhost  #ana bilgisayar adı
+
+  client:
+    register-with-eureka: false # eureka sunucusu bu uygulamayı yani kendisini kaydetmez.
+    fetch-registry: false       # Yani, uygulama başlatıldığında diğer hizmetlerin adreslerini veya konumlarını almayacaktır.
