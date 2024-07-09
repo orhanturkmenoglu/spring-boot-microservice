@@ -2,6 +2,7 @@ package com.example.user.service.service;
 
 import com.example.user.service.exception.ResourceNotFoundException;
 import com.example.user.service.external.HotelService;
+import com.example.user.service.external.RatingService;
 import com.example.user.service.model.Hotel;
 import com.example.user.service.model.Rating;
 import com.example.user.service.model.User;
@@ -32,6 +33,9 @@ public class UserService {
 
     private final HotelService hotelService;
 
+    private final RatingService ratingService;
+
+
     //create
 
     public User saveUser(User user) {
@@ -45,7 +49,7 @@ public class UserService {
 
     public List<User> getAllUser() {
         List<User> userList = userRepository.findAll();
-        String url = "http://RATING-SERVICE/ratings/all";
+       /* String url = "http://RATING-SERVICE/ratings/all";
         ResponseEntity<List<Rating>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -55,7 +59,11 @@ public class UserService {
         );
 
 
-        List<Rating> ratingList = response.getBody();
+        List<Rating> ratingList = response.getBody();*/
+
+        // feing client kullanarak rating servise istekte bulunma.
+
+        List<Rating> ratingList = ratingService.getRatingAll();
 
         userList.forEach(user -> {
             List<Rating> userRatings = findRatingsForUser(ratingList, user.getUserId());
@@ -65,9 +73,9 @@ public class UserService {
         log.info("ratingList : {}", ratingList.toString());
 
 
-
         return userList;
     }
+
     // Kullanıcıya ait değerlendirmeleri bulma
     private List<Rating> findRatingsForUser(List<Rating> ratingList, String userId) {
         return ratingList.stream()
@@ -111,7 +119,7 @@ public class UserService {
         // URL İLERLEYEN ZAMANLARDA DEĞİŞME İHTİMALİ YÜKSEK BUNU DİNAMİK HALE GETİRELİM
         // BUNUDA ZATEN HİZMET KAYDI İLE SERVİSLERİ İSİMLERİNE GÖRE TUTMUŞTUK.
         // BUNU İSİMLERİNE GÖRE KULLANABİLMEK İÇİN @LOADBLANCER AKTİF EDİYORUZ YÜKLERİ DAHA DİNAMİK HALE GETİR.
-        String ratingsUsersIdUrl = "http://RATING-SERVICE/ratings/users/" + user.getUserId();
+        /*String ratingsUsersIdUrl = "http://RATING-SERVICE/ratings/users/" + user.getUserId();
         ResponseEntity<List<Rating>> response = restTemplate.exchange(
                 ratingsUsersIdUrl,
                 HttpMethod.GET,
@@ -122,7 +130,11 @@ public class UserService {
 
         List<Rating> ratingsOfUser = response.getBody();
 
-        log.info("{}", ratingsOfUser);
+        log.info("{}", ratingsOfUser);*/
+
+        // feing client ile rating service çağrısında bulunuyoruz.
+
+        List<Rating> ratingsOfUser = ratingService.getRatingByUserId(user.getUserId());
 
         // gelen modeli gez ve hotel bilgilerni hotel serviceden  al.
         ratingsOfUser.stream().map(rating -> {
@@ -138,7 +150,7 @@ public class UserService {
             Hotel hotel = forEntity.getBody();// hotel bilgilerni dönder.*/
 
             Hotel hotel = hotelService.getHotel(rating.getHotelId());// hotel bilgilerni dönder.
-           // log.info("response status code : {}", forEntity.getStatusCode());
+            // log.info("response status code : {}", forEntity.getStatusCode());
 
             rating.setHotel(hotel);
 
