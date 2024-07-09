@@ -41,7 +41,35 @@ public class UserService {
     // get all user
 
     public List<User> getAllUser() {
-        return userRepository.findAll();
+        List<User> userList = userRepository.findAll();
+        String url = "http://RATING-SERVICE/ratings/all";
+        ResponseEntity<List<Rating>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Rating>>() {
+                }
+        );
+
+
+        List<Rating> ratingList = response.getBody();
+
+        userList.forEach(user -> {
+            List<Rating> userRatings = findRatingsForUser(ratingList, user.getUserId());
+            user.setRatings(userRatings);
+        });
+
+        log.info("ratingList : {}", ratingList.toString());
+
+
+
+        return userList;
+    }
+    // Kullanıcıya ait değerlendirmeleri bulma
+    private List<Rating> findRatingsForUser(List<Rating> ratingList, String userId) {
+        return ratingList.stream()
+                .filter(rating -> rating.getUserId().equals(userId))
+                .toList();
     }
 
 
@@ -113,8 +141,6 @@ public class UserService {
         }).collect(Collectors.toList());
         return ratingsOfUser;
     }
-
-
 
 
 }
