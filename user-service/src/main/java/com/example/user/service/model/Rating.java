@@ -1,9 +1,5 @@
 package com.example.user.service.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,4 +21,6 @@ public class Rating {
 
     private String feedback;
 
+    // rating derecelendirme sisteminden hotel bilgilerni de alıyor olacağız.
+    private Hotel hotel;
 }

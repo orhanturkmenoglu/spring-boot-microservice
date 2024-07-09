@@ -33,6 +33,7 @@ public class UserController {
 
     // all user get
     @GetMapping("/{userId}")
+    // BURADA KULLANICI DERECELENDİRME SİSTEMİNİ ARAYARAK KULLANICI DERELENDİRME BİLGİLERİNİ GETİRECEĞİZ.
     public ResponseEntity<User> getUserById(@PathVariable String userId) {
         User getUserById = userService.getUserById(userId);
         return ResponseEntity.ok(getUserById);
