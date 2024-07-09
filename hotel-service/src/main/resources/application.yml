@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/hotel-service
+
+
+  # Configuring Spring Data MongoDB                 # Enable Spring Data MongoDB repositories
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  main:
+    banner-mode: off
+
+logging:
+  level:
+    root: debug
