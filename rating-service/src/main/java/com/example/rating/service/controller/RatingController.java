@@ -43,4 +43,17 @@ public class RatingController {
         return ResponseEntity.ok(ratingAll);
     }
 
+
+    @PutMapping("/{ratingId}")
+    public ResponseEntity<Rating> updateRating(@PathVariable String ratingId, @RequestBody Rating rating) {
+        Rating saveRating = ratingService.updateRating(ratingId, rating);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveRating);
+    }
+
+    @DeleteMapping("/{ratingId}")
+    public ResponseEntity<Void> deleteRating(@PathVariable String ratingId) {
+        ratingService.deleteRatingById(ratingId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

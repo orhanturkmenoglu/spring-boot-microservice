@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -40,5 +39,28 @@ public class UserController {
         User getUserById = userService.getUserById(userId);
         return ResponseEntity.ok(getUserById);
     }
+
+
+    // create ratings
+    @PostMapping("/ratings")
+    public ResponseEntity<Rating> createRating(@RequestBody Rating rating) {
+        Rating saveRating = userService.createRating(rating);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saveRating);
+    }
+
+    // delete rating
+    @DeleteMapping("/ratings/{ratingId}")
+    public ResponseEntity<Rating> deleteRating(@PathVariable String ratingId) {
+        userService.deleteRating(ratingId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // update rating
+    @PutMapping("/ratings/{ratingId}")
+    public ResponseEntity<Rating> updateRating(@PathVariable String ratingId, @RequestBody Rating rating) {
+        Rating updatedRating = userService.updateRating(ratingId, rating);
+        return ResponseEntity.status(HttpStatus.CREATED).body(updatedRating);
+    }
+
 
 }

@@ -5,9 +5,9 @@ import com.example.rating.service.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +16,6 @@ public class RatingService {
 
     private final RatingRepository ratingRepository;
 
-    private final RestTemplate restTemplate;
 
     // create
 
@@ -40,6 +39,24 @@ public class RatingService {
     // get all by hotel
     public List<Rating> getRatingByHotelId(String hotelId) {
         return ratingRepository.findByHotelId(hotelId);
+    }
+
+    // update
+    public Rating updateRating(String ratingId, Rating rating) {
+        Optional<Rating> findRatingById = ratingRepository.findById(ratingId);
+
+        if (findRatingById.isEmpty()) {
+            throw new NullPointerException("rating is null");
+        }
+
+        return ratingRepository.save(rating);
+    }
+
+    // delete
+
+    public void deleteRatingById(String ratingId) {
+        Optional<Rating> findRatingById = ratingRepository.findById(ratingId);
+        findRatingById.ifPresent(rating -> ratingRepository.deleteById(rating.getRatingId()));
     }
 
 }

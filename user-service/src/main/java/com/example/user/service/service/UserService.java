@@ -9,9 +9,6 @@ import com.example.user.service.model.User;
 import com.example.user.service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -157,6 +154,22 @@ public class UserService {
             return rating;
         }).collect(Collectors.toList());
         return ratingsOfUser;
+    }
+
+
+    // create Rating service
+    public Rating createRating(Rating rating) {
+        return ratingService.createRating(rating);
+    }
+
+    // update Rating service
+    public Rating updateRating(String ratingId,Rating rating) {
+        return ratingService.updateRating(ratingId,rating);
+    }
+
+    // delete Rating
+    public void deleteRating(String ratingId) {
+        ratingService.deleteRating(ratingId);
     }
 
 
