@@ -24,3 +24,13 @@ logging:
   level:
     root: debug
 
+#eureka config
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    #bilgilerini eureka sunucusundan alıp almayacağını belirtir.
+    fetch-registry: true         # sunucu ile  register-with-eureka: true aynı olmalıdır.
+    register-with-eureka: true   #eureka server'a kayıt ol.
+    service-url:
+      defaultZone: http://localhost:8761/eureka  # Eureka servis kayıt defterine nasıl bağlanacağını belirtir.
