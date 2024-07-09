@@ -19,27 +19,28 @@ public class RatingController {
     // create rating
 
     @PostMapping
-    public ResponseEntity<Rating> createRating(@RequestBody Rating rating){
+    public ResponseEntity<Rating> createRating(@RequestBody Rating rating) {
         Rating saveRating = ratingService.createRating(rating);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveRating);
     }
 
     // get all
     @GetMapping("/all")
-    public ResponseEntity<List<Rating>> getRatings(){
+    public ResponseEntity<List<Rating>> getRatings() {
         List<Rating> ratingAll = ratingService.getRatingAll();
         return ResponseEntity.ok(ratingAll);
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<List<Rating>> getRatingsByUserId(@PathVariable String userId){
+    public ResponseEntity<List<Rating>> getRatingsByUserId(@PathVariable String userId) {
         List<Rating> ratingAll = ratingService.getRatingUserById(userId);
         return ResponseEntity.ok(ratingAll);
     }
 
     @GetMapping("/hotels/{hotelId}")
-    public ResponseEntity<List<Rating>> getRatingsByHotelId(@PathVariable String hotelId){
+    public ResponseEntity<List<Rating>> getRatingsByHotelId(@PathVariable String hotelId) {
         List<Rating> ratingAll = ratingService.getRatingByHotelId(hotelId);
         return ResponseEntity.ok(ratingAll);
     }
+
 }

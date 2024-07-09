@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -58,35 +57,8 @@ public class UserService {
          rating service içerisinde arayacağı url  : http://localhost:8082/ratings/users/{userId}
          */
         // rating servisi ile iletişime geçme
-        String url = "http://localhost:8082/ratings/users/" + user.getUserId();
-        /*
-        ResponseEntity ve exchange() Metodu Kullanma:
-        JSON dönüşümü için exchange() metodunu kullanarak ResponseEntity'yi doğrudan işleyebilirsiniz. Örneğin:
-         */
-        ResponseEntity<List<Rating>> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Rating>>() {
-                });
 
-        log.info("{}", response);
-
-        List<Rating> ratingsOfUser = response.getBody();
-
-        // gelen modeli gez ve hotel bilgilerni hotel serviceden  al.
-        ratingsOfUser.stream().map(rating -> {
-
-            // TEK BİR OBJEYE İHTİYACIM OLDUĞU İÇİN ENTİTY METHODUNU KULLANIYORUM
-            ResponseEntity<Hotel> forEntity = restTemplate.getForEntity("http://localhost:8081/hotels/" + rating.getHotelId(), Hotel.class);
-            Hotel hotel = forEntity.getBody();// hotel bilgilerni dönder.
-            log.info("response status code : {}", forEntity.getStatusCode());
-
-            rating.setHotel(hotel);
-
-            return rating;
-        }).collect(Collectors.toList());
-
+        List<Rating> ratingsOfUser = getRatings(user);
 
         // rating serviceden gelen değeri user servisine aktardık.
         user.setRatings(ratingsOfUser);
@@ -96,6 +68,53 @@ public class UserService {
         return user;
 
     }
+
+    private List<Rating> getRatings(User user) {
+    /*
+    ResponseEntity ve exchange() Metodu Kullanma:
+    JSON dönüşümü için exchange() metodunu kullanarak ResponseEntity'yi doğrudan işleyebilirsiniz. Örneğin:
+     */
+        // String ratingsUsersIdUrl = "http://localhost:8082/ratings/users/" + user.getUserId();
+
+        // SERVİCE REGİSTRY İLE SERVİS KAYDINI YAPMIŞTIK ŞİMDİ BU
+        // URL İLERLEYEN ZAMANLARDA DEĞİŞME İHTİMALİ YÜKSEK BUNU DİNAMİK HALE GETİRELİM
+        // BUNUDA ZATEN HİZMET KAYDI İLE SERVİSLERİ İSİMLERİNE GÖRE TUTMUŞTUK.
+        // BUNU İSİMLERİNE GÖRE KULLANABİLMEK İÇİN @LOADBLANCER AKTİF EDİYORUZ YÜKLERİ DAHA DİNAMİK HALE GETİR.
+        String ratingsUsersIdUrl = "http://RATING-SERVICE/ratings/users/" + user.getUserId();
+        ResponseEntity<List<Rating>> response = restTemplate.exchange(
+                ratingsUsersIdUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Rating>>() {
+                });
+
+
+        List<Rating> ratingsOfUser = response.getBody();
+
+        log.info("{}", ratingsOfUser);
+
+        // gelen modeli gez ve hotel bilgilerni hotel serviceden  al.
+        ratingsOfUser.stream().map(rating -> {
+
+            // TEK BİR OBJEYE İHTİYACIM OLDUĞU İÇİN ENTİTY METHODUNU kullanadabilirim
+            String ratingsHotelIdUrl = "http://HOTEL-SERVICE/hotels/" + rating.getHotelId();
+            ResponseEntity<Hotel> forEntity = restTemplate.exchange(
+                    ratingsHotelIdUrl,
+                    HttpMethod.GET,
+                    null,
+                    Hotel.class
+            );
+            Hotel hotel = forEntity.getBody();// hotel bilgilerni dönder.
+            log.info("response status code : {}", forEntity.getStatusCode());
+
+            rating.setHotel(hotel);
+
+            return rating;
+        }).collect(Collectors.toList());
+        return ratingsOfUser;
+    }
+
+
 
 
 }

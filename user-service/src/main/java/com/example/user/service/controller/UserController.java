@@ -1,5 +1,6 @@
 package com.example.user.service.controller;
 
+import com.example.user.service.model.Rating;
 import com.example.user.service.model.User;
 import com.example.user.service.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
@@ -38,4 +40,5 @@ public class UserController {
         User getUserById = userService.getUserById(userId);
         return ResponseEntity.ok(getUserById);
     }
+
 }
