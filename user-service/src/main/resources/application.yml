@@ -1,8 +1,9 @@
 server:
   port: 8080
 
-
 spring:
+  application:
+    name: USER-SERVICE
   datasource:
     url: jdbc:mysql://localhost:3306/microservice
     username: root
@@ -19,18 +20,22 @@ spring:
   main:
     banner-mode: off
 
+  config:
+    import: optional:configserver:http://localhost:8084    # yapılandırmayı içe aktarıyoruz.
+
+
 
 logging:
   level:
     root: debug
 
-#eureka config
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    #bilgilerini eureka sunucusundan alıp almayacağını belirtir.
-    fetch-registry: true         # sunucu ile  register-with-eureka: true aynı olmalıdır.
-    register-with-eureka: true   #eureka server'a kayıt ol.
-    service-url:
-      defaultZone: http://localhost:8761/eureka  # Eureka servis kayıt defterine nasıl bağlanacağını belirtir.
+##eureka config git sunucusundan import edilecek.
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    #bilgilerini eureka sunucusundan alıp almayacağını belirtir.
+#    fetch-registry: true         # sunucu ile  register-with-eureka: true aynı olmalıdır.
+#    register-with-eureka: true   #eureka server'a kayıt ol.
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka  # Eureka servis kayıt defterine nasıl bağlanacağını belirtir.

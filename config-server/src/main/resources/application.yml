@@ -1,0 +1,19 @@
+server:
+  port: 8084
+
+
+
+
+spring:
+  application:
+    name: CONFIG-SERVER
+
+
+  # config server configuration
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/orhanturkmenoglu/microservice-tutorial-config  #git bulutundaki sunucu adresi
+          # Config Server'ın başlatılması sırasında konfigürasyonların bir kopyasını yerel belleğe (cache) almasını sağlar. Bu ayarın amacı, Config Server'ın uygulama başlatıldığında bağımlı mikroservislere hızlı yanıtlar sağlaması ve ağ trafiğini azaltmasıdır.
+          clone-on-start: true

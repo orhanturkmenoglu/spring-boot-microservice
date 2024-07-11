@@ -3,6 +3,8 @@ server:
 
 
 spring:
+  application:
+    name: HOTEL-SERVICE
   data:
     mongodb:
       uri: mongodb://localhost:27017/hotel-service
@@ -18,6 +20,9 @@ spring:
         format_sql: true
   main:
     banner-mode: off
+
+  config:
+    import: optional:http://localhost:8084
 
 logging:
   level:
