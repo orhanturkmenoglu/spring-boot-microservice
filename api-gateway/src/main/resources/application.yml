@@ -19,7 +19,7 @@ spring:
         - id: HOTEL-SERVICE
           uri: lb://HOTEL-SERVICE  #LOADBALANCE İLE İSİMDEN ERİŞİM SAĞLAYABİLİRZ.
           predicates:
-            - Path=/hotels/**
+            - Path=/hotels/** ,/staffs   # multiple url : hotel servis içerisindeki birden fazla url olduğunda erişim bu şekilde devam ettirilir.
 
         - id: RATING-SERVICE
           uri: lb://RATING-SERVICE  #LOADBALANCE İLE İSİMDEN ERİŞİM SAĞLAYABİLİRZ.
