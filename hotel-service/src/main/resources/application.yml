@@ -22,7 +22,7 @@ spring:
     banner-mode: off
 
   config:
-    import: optional:http://localhost:8084
+    import: optional:configserver:http://localhost:8084
 
 logging:
   level:

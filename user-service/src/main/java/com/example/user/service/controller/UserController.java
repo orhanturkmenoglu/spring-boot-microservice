@@ -3,7 +3,10 @@ package com.example.user.service.controller;
 import com.example.user.service.model.Rating;
 import com.example.user.service.model.User;
 import com.example.user.service.service.UserService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
     private final UserService userService;
 
     // create
@@ -35,9 +39,19 @@ public class UserController {
     // all user get
     @GetMapping("/{userId}")
     // BURADA KULLANICI DERECELENDİRME SİSTEMİNİ ARAYARAK KULLANICI DERELENDİRME BİLGİLERİNİ GETİRECEĞİZ.
+    @CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")  // devre kesici uygulamasını çalıştırıyoruz istediğiniz isimi verebilirsiniz.
     public ResponseEntity<User> getUserById(@PathVariable String userId) {
         User getUserById = userService.getUserById(userId);
         return ResponseEntity.ok(getUserById);
+    }
+
+    // creating fall back method for circuit breaker :Geri dönüş methodu.
+    public ResponseEntity<User> ratingHotelFallback(String userId,Exception exception){
+        log.info("fallback is executed because servise is down :"+exception.getMessage());
+        User user = User.builder().email("dummy@gmail.com").name("Dummy").about("This is user is created dummy because some service is down")
+                .userId("141234")
+                .build();
+        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
 

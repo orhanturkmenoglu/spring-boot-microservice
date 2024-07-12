@@ -22,11 +22,9 @@ spring:
     banner-mode: off
 
   config:                                 # git sunucusundan eureaka config yapılandırmasını içe aktardım.
-    import: optional:http://localhost:8084
+    import: optional:configserver:http://localhost:8084
 
-logging:
-  level:
-    root: debug
+
 
 ##eureka config
 #eureka:
@@ -38,3 +36,7 @@ logging:
 #    register-with-eureka: true   #eureka server'a kayıt ol.
 #    service-url:
 #      defaultZone: http://localhost:8761/eureka  # Eureka servis kayıt defterine nasıl bağlanacağını belirtir.
+
+logging:
+  level:
+    root: debug

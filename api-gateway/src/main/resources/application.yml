@@ -27,7 +27,7 @@ spring:
             - Path=/ratings/**
 
   config:
-    import: optional:http://localhost:8084
+    import: optional:configserver:http://localhost:8084
 
 ##eureka config
 #eureka:
