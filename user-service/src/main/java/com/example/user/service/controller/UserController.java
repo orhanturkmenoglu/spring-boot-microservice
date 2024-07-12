@@ -4,6 +4,7 @@ import com.example.user.service.model.Rating;
 import com.example.user.service.model.User;
 import com.example.user.service.service.UserService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +37,16 @@ public class UserController {
         return ResponseEntity.ok(getUserAll);
     }
 
+    int count = 1;
     // all user get
     @GetMapping("/{userId}")
     // BURADA KULLANICI DERECELENDİRME SİSTEMİNİ ARAYARAK KULLANICI DERELENDİRME BİLGİLERİNİ GETİRECEĞİZ.
-    @CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")  // devre kesici uygulamasını çalıştırıyoruz istediğiniz isimi verebilirsiniz.
+    //@CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")  // devre kesici uygulamasını çalıştırıyoruz istediğiniz isimi verebilirsiniz.
+    @Retry(name = "ratingHotelService",fallbackMethod ="ratingHotelFallback")  // tekrar deneme mekanizması.
     public ResponseEntity<User> getUserById(@PathVariable String userId) {
+
+        log.info("Retry Count : {}",count);
+        count++;
         User getUserById = userService.getUserById(userId);
         return ResponseEntity.ok(getUserById);
     }

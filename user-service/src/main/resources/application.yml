@@ -53,6 +53,14 @@ resilience4j:
         slidingWindowSize: 10                    # Kayar pencere boyutunu ayarlar.Circuit Breaker, hata oranını hesaplamak için bu pencere içindeki çağrıları kullanır.
         slidingWindowType: COUNT_BASED           # Kayar pencere tipini belirler.
 
+
+  retry:                    #  retry (yeniden deneme) mekanizması
+    instances:
+      ratingHotelService:
+        max-attempts: 3     # kaç kez yeniden deneneceğini belirtir.
+        wait-duration: 5s   # iki deneme arasındaki bekleme süresini belirtir.
+
+
 logging:
   level:
     root: debug
