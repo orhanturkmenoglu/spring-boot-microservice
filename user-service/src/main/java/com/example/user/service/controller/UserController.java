@@ -4,6 +4,7 @@ import com.example.user.service.model.Rating;
 import com.example.user.service.model.User;
 import com.example.user.service.service.UserService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -42,7 +43,8 @@ public class UserController {
     @GetMapping("/{userId}")
     // BURADA KULLANICI DERECELENDİRME SİSTEMİNİ ARAYARAK KULLANICI DERELENDİRME BİLGİLERİNİ GETİRECEĞİZ.
     //@CircuitBreaker(name = "ratingHotelBreaker",fallbackMethod = "ratingHotelFallback")  // devre kesici uygulamasını çalıştırıyoruz istediğiniz isimi verebilirsiniz.
-    @Retry(name = "ratingHotelService",fallbackMethod ="ratingHotelFallback")  // tekrar deneme mekanizması.
+    //@Retry(name = "ratingHotelService",fallbackMethod ="ratingHotelFallback")  // tekrar deneme mekanizması.
+    @RateLimiter(name = "userRateLimiter",fallbackMethod = "ratingHotelFallback") // rate limiter (oran sınırlayıcı) kullanarak belirli bir süre içinde belirli sayıda istek kabul edebilirsiniz
     public ResponseEntity<User> getUserById(@PathVariable String userId) {
 
         log.info("Retry Count : {}",count);

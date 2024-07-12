@@ -61,6 +61,17 @@ resilience4j:
         wait-duration: 5s   # iki deneme arasındaki bekleme süresini belirtir.
 
 
+  ratelimiter:            #  rate limiter (oran sınırlayıcı) kullanarak belirli bir süre içinde belirli sayıda istek kabul edebilirsiniz
+    instances:
+      userRateLimiter:
+        limit-refresh-period: 4s    # limitin ne sıklıkla yenileneceğini belirtir.
+        limit-for-period: 2         #her dönem için izin verilen maksimum çağrı sayısını belirtir.
+        timeout-duration: 0s        # ate limiter'a ulaşılabilir olmayı beklemek için ne kadar süre bekleyeceğini belirtir.
+
+
+
+
+
 logging:
   level:
     root: debug
